@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <chrono>
+#include <ctime>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>

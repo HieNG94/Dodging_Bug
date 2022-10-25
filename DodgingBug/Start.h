@@ -6,6 +6,7 @@ class Start
 {
 private:
 	float moveSpeed;
+	float moveSpeedMax;
 	bool startGame;
 	int count;
 	RenderWindow* window;
@@ -18,6 +19,8 @@ private:
 	Text title;
 	Text opt1;
 	Font font;
+	float xLeft;
+	float xRight;
 
 	void initVariables();
 	void initWindow();
@@ -36,6 +39,7 @@ public:
 	void pollEvent();
 	bool getStart();
 	void updateOpt();
+	void updatePlayer();
 	void update();
 	void render();
 };

@@ -16,6 +16,7 @@ void Player::initPlayer()
 		cout << "Error: Cannot load player image." << endl;
 	}
 	this->bugSp.setTexture(this->bugText);
+	this->bugSp.setScale(1.5f, 1.f);
 
 	if (!this->bugTextFade.loadFromFile("Materials/bug1.png")) {
 		cout << "Error: Cannot load player fadded image." << endl;
@@ -65,26 +66,32 @@ void Player::updateInput()
 
 	// Keyboard input
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		if (this->xLeft != 0)
+		if (this->xLeft != 0) {
 			this->bugSp.move(-this->moveSpeed, 0.f);
+			this->bugSp.setScale(-1.5f, 1.f);
+		}
 		else
 			this->bugSp.move(0.f, 0.f);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		if (this->xRight != 1380)
+		if (this->xRight != 1380) {
 			this->bugSp.move(this->moveSpeed, 0.f);
+			this->bugSp.setScale(1.5f, 1.f);
+		}
 		else
 			this->bugSp.move(0.f, 0.f);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		if (this->yUp != 50)
+		if (this->yUp != 50) {
 			this->bugSp.move(0.f, -this->moveSpeed);
+		}
 		else
 			this->bugSp.move(0.f, 0.f);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-		if (this->yDown != 770)
+		if (this->yDown != 770) {
 			this->bugSp.move(0.f, this->moveSpeed);
+		}
 		else
 			this->bugSp.move(0.f, 0.f);
 	}

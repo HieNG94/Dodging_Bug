@@ -2,7 +2,8 @@
 
 void Start::initVariables()
 {
-	this->moveSpeed = 5.f;
+	this->moveSpeedMax = 5.f;
+	this->moveSpeed = this->moveSpeedMax;
 	this->startGame = true;
 	this->count = 0;
 }
@@ -27,6 +28,13 @@ void Start::initWorld()
 
 void Start::initPlayer()
 {
+	if (!this->playerTx.loadFromFile("Materials/bug.png")) {
+		cout << "Error: Cannot load player image." << endl;
+	}
+	this->playerTx.setSmooth(true);
+	this->playerSp.setTexture(this->playerTx);
+	this->playerSp.setPosition(Vector2f(0.f, 200.f));
+	this->playerSp.setScale(2.5f, 2.f);
 }
 
 void Start::initFont()
@@ -59,6 +67,7 @@ Start::Start()
 	this->initWorld();
 	this->initText();
 	this->initFont();
+	this->initPlayer();
 }
 
 Start::~Start()
@@ -85,7 +94,7 @@ void Start::pollEvent()
 				this->startGame = false;
 				this->window->close();
 			}
-			if (this->ev.key.code == Keyboard::Enter) {
+			if (this->ev.key.code == Keyboard::Enter || this->ev.key.code == Keyboard::Space) {
 				this->window->close();
 			}
 			break;
@@ -117,10 +126,30 @@ void Start::updateOpt()
 		this->count++;
 }
 
+void Start::updatePlayer()
+{
+	this->xLeft = this->playerSp.getPosition().x;
+	this->xRight = xLeft + 50.f;
+
+	if (this->xLeft <= -55) {
+		this->playerSp.setPosition(-50, rand() % 350 + 200);
+		this->moveSpeed = this->moveSpeedMax;
+		this->playerSp.setScale(2.5f, 2.f);
+	}
+	else if (this->xRight >= 1435)
+	{
+		this->playerSp.setPosition(1380, rand() % 350 + 200);
+		this->moveSpeed = -this->moveSpeedMax;
+		this->playerSp.setScale(-2.5f, 2.f);
+	}
+	this->playerSp.move(this->moveSpeed, 0.f);
+}
+
 void Start::update()
 {
 	this->pollEvent();
 	this->updateOpt();
+	this->updatePlayer();
 }
 
 void Start::render()
@@ -133,7 +162,7 @@ void Start::render()
 	this->window->draw(this->opt1);
 
 	// Draw player
-
+	this->window->draw(this->playerSp);
 
 	// Draw game objects
 	this->window->display();

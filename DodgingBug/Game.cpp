@@ -6,6 +6,9 @@ void Game::initVariables()
 	this->point = 0;
 	this->hp = MAX_HP;
 	this->hit = false;
+	this->justStart = true;
+	this->start = high_resolution_clock::now();
+	srand(time(NULL));
 }
 
 void Game::initWindow()
@@ -33,6 +36,11 @@ void Game::initFont()
 		cout << "Error: Cannot load font" << endl;
 		this->window->close();
 	}
+
+	if (!this->fontEnd.loadFromFile("Materials/startFont.ttf")) {
+		cout << "Error: Cannot load font" << endl;
+		this->window->close();
+	}
 }
 
 void Game::initText()
@@ -48,6 +56,29 @@ void Game::initText()
 	this->textHp.setCharacterSize(35);
 	this->textHp.setPosition(Vector2f(790.f, 0.f));
 	this->textHp.setString("HP ");
+
+	this->textEnd.setFont(this->fontEnd);
+	this->textEnd.setFillColor(Color::Red);
+	this->textEnd.setCharacterSize(100);
+	this->textEnd.setPosition(Vector2f(400.f, 400.f));
+	this->textEnd.setString("GAME OVER!");
+
+	this->textEnd.setFont(this->fontEnd);
+	this->textEnd.setFillColor(Color::Red);
+	this->textEnd.setCharacterSize(100);
+	this->textEnd.setPosition(Vector2f(200.f, 250.f));
+	this->textEnd.setString("GAME OVER!");
+
+	this->textEndPoint.setFont(this->fontEnd);
+	this->textEndPoint.setFillColor(Color::Red);
+	this->textEndPoint.setCharacterSize(50);
+	this->textEndPoint.setPosition(Vector2f(200.f, 350.f));
+
+	this->retry.setFont(this->fontEnd);
+	this->retry.setFillColor(Color::Red);
+	this->retry.setCharacterSize(50);
+	this->retry.setPosition(Vector2f(200.f, 400.f));
+	this->retry.setString("[F1] to Retry");
 }
 
 void Game::initGUI()
@@ -90,6 +121,17 @@ void Game::pollEvent() {
 		case Event::KeyPressed:
 			if (this->ev.key.code == Keyboard::Escape)
 				this->window->close();
+			else if (this->ev.key.code == Keyboard::F1) {
+				this->point = 0;
+				this->hp = MAX_HP;
+				this->hit = false;
+				this->justStart = true;
+				this->start = high_resolution_clock::now();
+				this->worldBackground.setPosition(Vector2f(0.f, 50.f));
+				this->worldBackground1.setPosition(Vector2f(1380.f, 50.f));
+				for (int i = 0; i < this->MAX_OBSTACLES; i++)
+					this->obs[i].spawnObstacle();
+			}
 			break;
 		}
 	}
@@ -97,19 +139,29 @@ void Game::pollEvent() {
 
 void Game::update() {
 	this->pollEvent();
-	this->updateGUI();
-	this->updateWorld();
-	this->player.update();
-	this->updateHit();
+	if (this->hp > 0) {
+		this->updateGUI();
+		this->updateWorld();
+		this->player.update();
+		this->updateHit();
 
-	for (int i = 0; i < this->MAX_OBSTACLES; i++) {
-		this->obs[i].update();
-		if (this->obs[i].isHit(this->player.boundingPl())) {
-			if (!this->hit) {
-				this->start = high_resolution_clock::now();
-				this->hp -= 1.f;
-				this->hit = true;
+		if (!this->justStart)
+		{
+			for (int i = 0; i < this->MAX_OBSTACLES; i++) {
+				this->obs[i].update();
+				if (this->obs[i].isHit(this->player.boundingPl())) {
+					if (!this->hit) {
+						this->start = high_resolution_clock::now();
+						this->hp -= 1.f;
+						this->hit = true;
+					}
+				}
 			}
+		}
+		else {
+			this->end = high_resolution_clock::now();
+			if (duration_cast<float_second>(this->end - this->start).count() > 5.f)
+				this->justStart = false;
 		}
 	}
 }
@@ -140,13 +192,13 @@ void Game::updateWorld()
 {
 	if (this->worldBackground.getPosition().x + 1380 <= 0) {
 		this->worldBackground.setPosition(Vector2f(1380.f, 50.f));
-		this->point += 100;
+		this->point += 200;
 	}
 	this->worldBackground.move(Vector2f(-1.f, 0.f));
 
 	if (this->worldBackground1.getPosition().x + 1380 <= 0) {
 		this->worldBackground1.setPosition(Vector2f(1380.f, 50.f));
-		this->point += 100;
+		this->point += 200;
 	}
 	this->worldBackground1.move(Vector2f(-1.f, 0.f));
 }
@@ -167,18 +219,28 @@ void Game::renderWorld() {
 }
 
 void Game::render() {
-	this->window->clear(Color(165, 250, 247, 1));
+	if (this->hp > 0) {
+		this->window->clear(Color(165, 250, 247, 1));
 
-	// Draw game window
-	this->renderWorld();
-	this->renderGUI();
+		// Draw game window
+		this->renderWorld();
+		this->renderGUI();
 
-	// Draw player
-	this->player.render(this->window);
+		// Draw player
+		this->player.render(this->window);
 
-	// Draw obstacles
-	for (int i = 0; i < this->MAX_OBSTACLES; i++)
-		this->obs[i].render(this->window);
+		// Draw obstacles
+		for (int i = 0; i < this->MAX_OBSTACLES; i++)
+			this->obs[i].render(this->window);
+	}
+	else {
+		this->window->draw(this->textEnd);
+		stringstream ss;
+		ss << this->point << " Pts.";
+		this->textEndPoint.setString(ss.str());
+		this->window->draw(this->textEndPoint);
+		this->window->draw(this->retry);
+	}
 
 	// Draw game objects
 	this->window->display();

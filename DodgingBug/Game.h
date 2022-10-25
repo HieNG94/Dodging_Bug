@@ -14,6 +14,7 @@ private:
 	const float MAX_HP = 10.f;
 	const int MAX_OBSTACLES = 10;
 	bool hit;
+	bool justStart;
 	time_point<high_resolution_clock> start, end;
 	typedef duration<float> float_second;
 
@@ -26,7 +27,11 @@ private:
 	Sprite worldBackground1;
 	Text textPoint;
 	Text textHp;
+	Text textEnd;
+	Text textEndPoint;
+	Text retry;
 	Font font;
+	Font fontEnd;
 	RectangleShape hpBarBorder;
 	RectangleShape hpBar;
 	Player player;

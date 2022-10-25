@@ -1,2 +1,16 @@
-﻿  Start.cpp
+﻿  Game.cpp
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Game.cpp(11,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Obstacle.cpp
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Obstacle.cpp(5,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Obstacle.cpp(7,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Obstacle.cpp(55,31): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Obstacle.cpp(56,45): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Obstacle.cpp(58,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Player.cpp
+  Start.cpp
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Start.cpp(135,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\hienn\source\repos\DodgingBug\DodgingBug\Start.cpp(141,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  header.cpp
+  main.cpp
+  Generating Code...
   DodgingBug.vcxproj -> C:\Users\hienn\source\repos\DodgingBug\x64\Debug\DodgingBug.exe

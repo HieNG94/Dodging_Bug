@@ -6,7 +6,11 @@ class Obstacle
 {
 private:
 	float moveSpeed;
-	Texture obsText;
+	float accelerate;
+	Texture obsText1;
+	Texture obsText2;
+	Texture obsText3;
+	Texture obsText4;
 	Sprite obsSp;
 	FloatRect boundingBox;
 	float scale;
